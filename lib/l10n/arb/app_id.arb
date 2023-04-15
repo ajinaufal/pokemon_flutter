@@ -1,0 +1,7 @@
+{
+    "@@locale": "id",
+    "testTitle": "Halo",
+    "@testTitle": {
+        "description": "Text show in blablabla"
+    }
+}
