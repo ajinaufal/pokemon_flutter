@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pokemon_flutter/core/router/router_constant.dart';
-import 'package:pokemon_flutter/core/router/router_observer.dart';
-import 'package:pokemon_flutter/features/pokedex/view/pokemon_list_view.dart';
+import 'package:pokemon_flutter/core/core.dart';
+import 'package:pokemon_flutter/features/features.dart';
 
 final routeNavigatorKey = GlobalKey<NavigatorState>();
 final routerProvider = Provider.autoDispose<GoRouter>((ref) {
@@ -18,8 +17,19 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
 
 List<GoRoute> get routes => [
       GoRoute(
+        parentNavigatorKey: routeNavigatorKey,
         name: RouterConstant.baseRouter.name,
         path: RouterConstant.baseRouter.route,
         builder: (context, state) => const PokemonListView(),
       ),
+      GoRoute(
+        parentNavigatorKey: routeNavigatorKey,
+        path: RouterConstant.detailRouter.route,
+        name: RouterConstant.detailRouter.name,
+        builder: (context, state) {
+          PokemonDetailsEntities argument =
+              state.extra as PokemonDetailsEntities;
+          return DetailPokemonView(argument: argument);
+        },
+      )
     ];

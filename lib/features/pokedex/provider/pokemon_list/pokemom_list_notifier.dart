@@ -87,7 +87,7 @@ class PokemomListNotifier
     final typeColors = <Color>[];
     data.types
         ?.map(
-          (e) => typeColors.addAll(
+          (e) => typeColors.add(
             e.type?.name?.color ?? TypePokemon.unknown.color,
           ),
         )

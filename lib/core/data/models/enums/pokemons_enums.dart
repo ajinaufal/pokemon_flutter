@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 
 enum TypePokemon {
-  normal([Color(0xFFA4ACAF)]),
-  fighting([Color(0xFFD56723)]),
-  flying([Color(0xFF3DC7EF), Color(0xFFBDB9B8)]),
-  poison([Color(0xFFB97FC9)]),
-  ground([Color(0xFFF7DE3F), Color(0xFFAB9842)]),
-  rock([Color(0xFFA38C21)]),
-  bug([Color(0xFF729F3F)]),
-  ghost([Color(0xFF7B62A3)]),
-  steel([Color(0xFF9EB7B8)]),
-  fire([Color(0xFFFD7D24)]),
-  water([Color(0xFF4592C4)]),
-  grass([Color(0xFF9BCC50)]),
-  electric([Color(0xFFEED535)]),
-  psychic([Color(0xFFF366B9)]),
-  ice([Color(0xFF51C4E7)]),
-  dragon([Color(0xFF53A4CF), Color(0xFFF16E57)]),
-  dark([Color(0xFF707070)]),
-  fairy([Color(0xFFFDB9E9)]),
-  unknown([Colors.grey]),
-  shadow([Colors.purpleAccent]);
+  normal(Color(0xFFA8A77A)),
+  fighting(Color(0xFFC22E28)),
+  flying(Color(0xFFA98FF3)),
+  poison(Color(0xFFA33EA1)),
+  ground(Color(0xFFE2BF65)),
+  rock(Color(0xFFB6A136)),
+  bug(Color(0xFFA6B91A)),
+  ghost(Color(0xFF735797)),
+  steel(Color(0xFFB7B7CE)),
+  fire(Color(0xFFEE8130)),
+  water(Color(0xFF6390F0)),
+  grass(Color(0xFF7AC74C)),
+  electric(Color(0xFFF7D02C)),
+  psychic(Color(0xFFF95587)),
+  ice(Color(0xFF96D9D6)),
+  dragon(Color(0xFF6F35FC)),
+  dark(Color(0xFF705746)),
+  fairy(Color(0xFFD685AD)),
+  unknown(Color(0xFF68A090)),
+  shadow(Color(0xFF5269AC));
 
-  final List<Color> color;
+  final Color color;
   const TypePokemon(this.color);
 }

@@ -1,0 +1,11 @@
+export 'detail_pokemon/detail_pokemon.dart';
+export 'detail_pokemon/view/detail_pokemon_view.dart';
+export 'pokedex/pokedex.dart';
+export 'pokedex/pokemon_list.dart';
+export 'pokedex/provider/pokemon_list/pokemom_list_notifier.dart';
+export 'pokedex/provider/pokemon_list/pokemon_list.dart';
+export 'pokedex/provider/pokemon_list/pokemon_list_provider.dart';
+export 'pokedex/provider/provider.dart';
+export 'pokedex/view/pokemon_list_view.dart';
+export 'pokedex/view/view.dart';
+export 'pokedex/widget/box_pokemon.dart';

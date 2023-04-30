@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pokemon_flutter/core/core.dart';
 
 class BoxPokemon extends StatelessWidget {
@@ -23,48 +24,54 @@ class BoxPokemon extends StatelessWidget {
     if (image == null) return const SizedBox();
     if (name == null) return const SizedBox();
 
-    return AspectRatio(
-      aspectRatio: 1.5,
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(16.r)),
-          gradient: LinearGradient(
-            colors: colors ?? TypePokemon.unknown.color,
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-          ),
-          color: Colors.red,
-        ),
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.bottomRight,
-              child: CachedNetworkImage(
-                imageUrl: image,
-                width: 80.r,
-                height: 80.r,
-              ),
+    return GestureDetector(
+      onTap: () => context.pushNamed(
+        RouterConstant.detailRouter.name,
+        extra: data,
+      ),
+      child: AspectRatio(
+        aspectRatio: 1.5,
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(16.r)),
+            // color: colors?.first ?? TypePokemon.unknown.color,
+            gradient: LinearGradient(
+              colors: colors ?? [TypePokemon.unknown.color],
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
             ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: ListView(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                padding: EdgeInsets.only(top: 12.h, left: 12.w),
-                children: [
-                  Text(
-                    StringHelper().capitalize(word: name),
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Colors.white,
-                        ),
-                  ),
-                  SizedBox(height: 3.h),
-                  buildTypes(context),
-                ],
+          ),
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.bottomRight,
+                child: CachedNetworkImage(
+                  imageUrl: image,
+                  width: 80.r,
+                  height: 80.r,
+                ),
               ),
-            )
-          ],
+              Align(
+                alignment: Alignment.topLeft,
+                child: ListView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  padding: EdgeInsets.only(top: 12.h, left: 12.w),
+                  children: [
+                    Text(
+                      StringHelper().capitalize(word: name),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            color: Colors.white,
+                          ),
+                    ),
+                    SizedBox(height: 3.h),
+                    buildTypes(context),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
