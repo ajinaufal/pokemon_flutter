@@ -1,15 +1,16 @@
-import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pokemon_flutter/core/core.dart';
-import 'package:pokemon_flutter/features/detail_pokemon/widget/clippath.dart';
+import 'package:pokemon_flutter/features/detail_pokemon/provider/pokemon_species/notifier/pokemon_species_notifier.dart';
+import 'package:pokemon_flutter/features/detail_pokemon/widget/abilities.dart';
+import 'package:pokemon_flutter/features/detail_pokemon/widget/appbar.dart';
+import 'package:pokemon_flutter/features/detail_pokemon/widget/base_status.dart';
+import 'package:pokemon_flutter/features/detail_pokemon/widget/clipper_types.dart';
+import 'package:pokemon_flutter/features/detail_pokemon/widget/physical_information.dart';
 
-class DetailPokemonView extends StatefulWidget {
-  const DetailPokemonView({
+class DetailsPokemonView extends ConsumerStatefulWidget {
+  const DetailsPokemonView({
     super.key,
     required this.argument,
   });
@@ -17,133 +18,52 @@ class DetailPokemonView extends StatefulWidget {
   final PokemonDetailsEntities argument;
 
   @override
-  State<DetailPokemonView> createState() => _DetailPokemonViewState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _DetailsPokemonViewState();
 }
 
-class _DetailPokemonViewState extends State<DetailPokemonView> {
+class _DetailsPokemonViewState extends ConsumerState<DetailsPokemonView> {
+  @override
+  void initState() {
+    super.initState();
+    ref
+        .read(pokemonSpeciesNotifier.notifier)
+        .getPokemonSpecies(widget.argument.name ?? '');
+  }
+
   @override
   Widget build(BuildContext context) {
-    final colors = widget.argument.colors ?? [TypePokemon.unknown.color];
-    final images =
-        widget.argument.sprites?.other?.officialArtwork?.frontDefault;
-    final name = widget.argument.name;
-    final id = widget.argument.id ?? 0;
-    final types = widget.argument.types ?? [];
-
+    final state = ref.watch(pokemonSpeciesNotifier);
     return Scaffold(
-      appBar: AppBar(
-        title: const SizedBox(),
-        toolbarHeight: .3.sh,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        leading: const SizedBox(),
-        flexibleSpace: Stack(
-          children: [
-            ClipPath(
-              clipper: ClipPathClass(),
-              child: Container(
-                padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 60.h),
-                height: .26.sh,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: colors,
-                    begin: Alignment.bottomLeft,
-                    end: Alignment.topRight,
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            context.canPop()
-                                ? GestureDetector(
-                                    onTap: () => context.pop(),
-                                    child: Icon(
-                                      Platform.isAndroid
-                                          ? Icons.arrow_back_rounded
-                                          : Icons.arrow_back_ios_new_rounded,
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                : const SizedBox(),
-                            context.canPop()
-                                ? SizedBox(width: 8.w)
-                                : const SizedBox(),
-                            Text(
-                              (name ?? '').toUpperCase(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall
-                                  ?.copyWith(
-                                    color: Colors.white,
-                                  ),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          '# $id',
-                          style:
-                              Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    color: Colors.white,
-                                  ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: CachedNetworkImage(
-                imageUrl: images ?? '',
-                width: 180.r,
-                height: 180.r,
-              ),
-            ),
-          ],
+      appBar: state.whenOrNull(
+        success: (data) => CustomAppbarDetailPokemon(
+          data: widget.argument,
         ),
       ),
-      body: ListView(
-        shrinkWrap: true,
-        padding: EdgeInsets.only(
-          left: 16.w,
-          right: 16.w,
-          bottom: 16.h,
+      body: state.whenOrNull(
+        error: (message) => const SizedBox(),
+        loading: () => const Center(
+          child: CircularProgressIndicator(color: Colors.black),
         ),
-        children: [
-          Wrap(
-            spacing: 8.w,
-            alignment: WrapAlignment.center,
-            children: List.generate(types.length, (index) {
-              var nameType =
-                  describeEnum(types[index].type?.name ?? TypePokemon.unknown);
-              var colorType =
-                  (types[index].type?.name ?? TypePokemon.unknown).color;
-              return Container(
-                width: 100.w,
-                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 4.h),
-                decoration: BoxDecoration(
-                  color: colorType,
-                  borderRadius: BorderRadius.all(Radius.circular(12.r)),
-                ),
-                child: Text(
-                  nameType,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Colors.white,
-                      ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                ),
-              );
-            }),
-          )
-        ],
+        success: (data) => ListView(
+          shrinkWrap: true,
+          padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.h),
+          children: [
+            ClipperTypesPokemon(data: widget.argument),
+            SizedBox(height: 16.h),
+            PhysicalInformation(
+              data: widget.argument,
+              species: data,
+            ),
+            SizedBox(height: 16.h),
+            BaseStatusPokemonDetails(
+              data: widget.argument,
+              species: data,
+            ),
+            SizedBox(height: 16.h),
+            AbilitiesPokemonDetails(data: widget.argument)
+          ],
+        ),
       ),
     );
   }

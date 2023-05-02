@@ -1,9 +1,5 @@
-import 'package:pokemon_flutter/core/data/models/request/request_pokemon_details.dart';
-import 'package:pokemon_flutter/core/data/models/request/request_pokemon_list.dart';
-import 'package:pokemon_flutter/core/data/models/response/pokemon_details_model.dart';
-import 'package:pokemon_flutter/core/data/models/response/pokemon_list_model.dart';
-import 'package:pokemon_flutter/core/domain/entitites/pokemon_details_entities.dart';
-import 'package:pokemon_flutter/core/domain/entitites/pokemon_list_entities.dart';
+import 'package:pokemon_flutter/core/data/data.dart';
+import 'package:pokemon_flutter/core/domain/entitites/entitites.dart';
 import 'package:pokemon_flutter/core/services/api_service.dart';
 
 abstract class PokemonRemoteDataSource {
@@ -11,6 +7,7 @@ abstract class PokemonRemoteDataSource {
   Future<PokemonDetailsEntities> getPokemonDetails(
     RequestPokemonDetailsModel request,
   );
+  Future<PokemonSpeciesEntities> getPokemonSpecies(String name);
 }
 
 class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
@@ -39,6 +36,16 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
         await apiService.get('/pokemon/${request.name ?? request.id}');
     if (response.statusCode == 200) {
       return PokemonDetailsModel.fromJson(response.data).toEntity();
+    } else {
+      throw Exception(response);
+    }
+  }
+
+  @override
+  Future<PokemonSpeciesEntities> getPokemonSpecies(String name) async {
+    final response = await apiService.get('pokemon-species/$name');
+    if (response.statusCode == 200) {
+      return PokemonSpeciesModel.fromJson(response.data).toEntity();
     } else {
       throw Exception(response);
     }

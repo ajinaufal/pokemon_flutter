@@ -29,7 +29,7 @@ List<GoRoute> get routes => [
         builder: (context, state) {
           PokemonDetailsEntities argument =
               state.extra as PokemonDetailsEntities;
-          return DetailPokemonView(argument: argument);
+          return DetailsPokemonView(argument: argument);
         },
       )
     ];

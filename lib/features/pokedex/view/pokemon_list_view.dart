@@ -31,8 +31,17 @@ class _PokemonListViewState extends ConsumerState<PokemonListView> {
   Widget build(BuildContext context) {
     final state = ref.watch(pokemomListNotifier);
     return Scaffold(
-      body: state.when(
-        initial: () => const SizedBox(),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text(
+          'Pokedex',
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        toolbarHeight: 50.h,
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
+      body: state.whenOrNull(
         loading: () =>
             const Center(child: CircularProgressIndicator(color: Colors.black)),
         empty: () => const SizedBox(),
@@ -43,14 +52,38 @@ class _PokemonListViewState extends ConsumerState<PokemonListView> {
   }
 
   Widget buildSucces(List<PokemonDetailsEntities> data) {
-    return AlignedGridView.count(
-      controller: _scrollController,
-      padding: EdgeInsets.all(16.r),
-      itemCount: data.length,
-      crossAxisCount: 2,
-      mainAxisSpacing: 4,
-      crossAxisSpacing: 4,
-      itemBuilder: (context, index) => BoxPokemon(data: data[index]),
+    return ListView(
+      padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.h),
+      shrinkWrap: true,
+      children: [
+        // TextField(
+        //   maxLines: 1,
+        //   decoration: InputDecoration(
+        //       border: OutlineInputBorder(
+        //         borderSide: BorderSide.none,
+        //         borderRadius: BorderRadius.circular(50),
+        //       ),
+        //       enabledBorder: OutlineInputBorder(
+        //         borderSide: BorderSide.none,
+        //         borderRadius: BorderRadius.circular(50),
+        //       ),
+        //       fillColor: Colors.grey.shade200,
+        //       filled: true,
+        //       hintText: "Name or Number",
+        //       contentPadding:
+        //           EdgeInsets.symmetric(vertical: 4.h, horizontal: 12.w)),
+        // ),
+        // SizedBox(height: 16.h),
+        AlignedGridView.count(
+          shrinkWrap: true,
+          controller: _scrollController,
+          itemCount: data.length,
+          crossAxisCount: 2,
+          mainAxisSpacing: 4,
+          crossAxisSpacing: 4,
+          itemBuilder: (context, index) => BoxPokemon(data: data[index]),
+        ),
+      ],
     );
   }
 

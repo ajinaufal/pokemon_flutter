@@ -9,6 +9,8 @@ export 'models/request/request_pokemon_details.dart';
 export 'models/request/request_pokemon_list.dart';
 export 'models/response/pokemon_details_model.dart';
 export 'models/response/pokemon_list_model.dart';
+export 'models/response/pokemon_species_model.dart';
 export 'models/response/response.dart';
 export 'models/route/route_model.dart';
 export 'repositories/pokemon_repositories_impl.dart';
+export 'repositories/repositories.dart';

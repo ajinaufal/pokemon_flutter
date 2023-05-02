@@ -1,1 +1,1 @@
-export 'pokemon_list_repository.dart';
+export 'pokemon_repositories.dart';
